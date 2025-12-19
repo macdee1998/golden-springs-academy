@@ -1,59 +1,71 @@
-const slides = document.querySelectorAll(".slide");
-const prevBtn = document.querySelector(".prev");
-const nextBtn = document.querySelector(".next");
 
-let currentIndex = 0;
-const totalSlides = slides.length;
+document.addEventListener("DOMContentLoaded", () => {
+  const heroSection = document.querySelector(".hero");
+  if (!heroSection) return;
 
-function showSlide(index) {
-  slides.forEach((slide, i) => {
-    slide.classList.remove("active");
-    if (i === index) slide.classList.add("active");
-  });
-}
+  const slides = heroSection.querySelectorAll(".hero-slides .slide");
+  const prevBtn = heroSection.querySelector(".hero-nav .prev");
+  const nextBtn = heroSection.querySelector(".hero-nav .next");
 
-function nextSlide() {
-  currentIndex = (currentIndex + 1) % totalSlides;
-  showSlide(currentIndex);
-}
+  if (!slides.length || !prevBtn || !nextBtn) return;
 
-function prevSlide() {
-  currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
-  showSlide(currentIndex);
-}
+  let currentIndex = 0;
+  const totalSlides = slides.length;
 
-nextBtn.addEventListener("click", nextSlide);
-prevBtn.addEventListener("click", prevSlide);
+  function showSlide(index) {
+    slides.forEach((slide, i) => {
+      slide.classList.remove("active");
+      if (i === index) slide.classList.add("active");
+    });
+  }
 
-let autoSlide = setInterval(nextSlide, 5000);
+  function nextSlide() {
+    currentIndex = (currentIndex + 1) % totalSlides;
+    showSlide(currentIndex);
+  }
 
-let touchStartX = 0;
-let touchEndX = 0;
+  function prevSlide() {
+    currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+    showSlide(currentIndex);
+  }
 
-const heroSection = document.querySelector(".hero");
-
-heroSection.addEventListener("touchstart", (e) => {
-  touchStartX = e.changedTouches[0].screenX;
-});
-
-heroSection.addEventListener("touchend", (e) => {
-  touchEndX = e.changedTouches[0].screenX;
-  handleGesture();
-});
-
-function handleGesture() {
-  const swipeThreshold = 50;
-  if (touchEndX < touchStartX - swipeThreshold) {
+  nextBtn.addEventListener("click", () => {
     nextSlide();
     resetAutoSlide();
-  }
-  if (touchEndX > touchStartX + swipeThreshold) {
+  });
+
+  prevBtn.addEventListener("click", () => {
     prevSlide();
     resetAutoSlide();
-  }
-}
+  });
 
-function resetAutoSlide() {
-  clearInterval(autoSlide);
-  autoSlide = setInterval(nextSlide, 5000);
-}
+  let autoSlide = setInterval(nextSlide, 5000);
+
+  function resetAutoSlide() {
+    clearInterval(autoSlide);
+    autoSlide = setInterval(nextSlide, 5000);
+  }
+
+  let touchStartX = 0;
+  let touchEndX = 0;
+  const swipeThreshold = 50;
+
+  heroSection.addEventListener("touchstart", (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  });
+
+  heroSection.addEventListener("touchend", (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    if (touchEndX < touchStartX - swipeThreshold) {
+      nextSlide();
+      resetAutoSlide();
+    }
+    if (touchEndX > touchStartX + swipeThreshold) {
+      prevSlide();
+      resetAutoSlide();
+    }
+  });
+
+  // Initialize first slide
+  showSlide(currentIndex);
+});
