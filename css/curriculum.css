@@ -1,0 +1,88 @@
+.curriculum {
+  background-color: #ffffff;
+  padding: 100px 0;
+}
+
+.curriculum-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 70px;
+  align-items: center;
+}
+
+.curriculum-content h2 {
+  font-family: "Playfair Display", serif;
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: #0b2a4a;
+  margin-bottom: 24px;
+}
+
+.curriculum-content p {
+  font-family: "Inter", sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #444;
+  margin-bottom: 30px;
+}
+
+.curriculum-list {
+  list-style: none;
+  padding: 0;
+}
+
+.curriculum-list li {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 14px;
+}
+
+.curriculum-list i {
+  color: #c9a24d;
+  margin-right: 12px;
+  font-size: 1rem;
+}
+
+.curriculum-highlights {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.highlight-card {
+  background-color: #f6f8fb;
+  padding: 36px 28px;
+  border-radius: 4px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease,
+    background-color 0.3s ease;
+}
+
+.highlight-card:hover {
+  background-color: #babff2ff;
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+}
+
+.highlight-card i {
+  font-size: 2.2rem;
+  color: #c9a24d;
+  margin-bottom: 16px;
+}
+
+.highlight-card h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0b2a4a;
+  margin-bottom: 12px;
+}
+
+.highlight-card p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #555;
+}
