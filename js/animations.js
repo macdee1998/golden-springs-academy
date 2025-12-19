@@ -1,50 +1,68 @@
-const slider = document.querySelector(".testimonial-slider");
-const slides = document.querySelectorAll(".testimonial-slide");
-const prev = document.querySelector(".prev");
-const next = document.querySelector(".next");
+document.addEventListener("DOMContentLoaded", () => {
+  const sliderContainer = document.querySelector(".testimonial-slider");
+  const slides = document.querySelectorAll(".testimonial-slide");
+  const prevBtn = document.querySelector(
+    ".testimonials .testimonial-nav .prev"
+  );
+  const nextBtn = document.querySelector(
+    ".testimonials .testimonial-nav .next"
+  );
 
-let index = 0;
-const total = slides.length;
+  if (!sliderContainer || slides.length === 0 || !prevBtn || !nextBtn) return;
 
-function showSlide(i) {
-  slider.style.transform = `translateX(-${i * 100}%)`;
-}
+  let currentIndex = 0;
+  const totalSlides = slides.length;
+  const slideWidth = 100;
 
-next.addEventListener("click", () => {
-  index = (index + 1) % total;
-  showSlide(index);
-});
+  const updateSlider = () => {
+    sliderContainer.style.transform = `translateX(-${
+      currentIndex * slideWidth
+    }%)`;
+  };
 
-prev.addEventListener("click", () => {
-  index = (index - 1 + total) % total;
-  showSlide(index);
-});
+  const nextSlide = () => {
+    currentIndex = (currentIndex + 1) % totalSlides;
+    updateSlider();
+  };
 
-setInterval(() => {
-  index = (index + 1) % total;
-  showSlide(index);
-}, 5000);
+  const prevSlide = () => {
+    currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+    updateSlider();
+  };
 
-document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-  anchor.addEventListener("click", function (e) {
-    e.preventDefault();
-    const target = document.querySelector(this.getAttribute("href"));
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth" });
+  nextBtn.addEventListener("click", nextSlide);
+  prevBtn.addEventListener("click", prevSlide);
+
+  let autoSlide = setInterval(nextSlide, 6000);
+
+  const resetInterval = () => {
+    clearInterval(autoSlide);
+    autoSlide = setInterval(nextSlide, 6000);
+  };
+
+  nextBtn.addEventListener("click", resetInterval);
+  prevBtn.addEventListener("click", resetInterval);
+
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  sliderContainer.addEventListener("touchstart", (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  });
+
+  sliderContainer.addEventListener("touchend", (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    const swipeThreshold = 50;
+    if (touchEndX < touchStartX - swipeThreshold) {
+      nextSlide();
+      resetInterval();
+    }
+    if (touchEndX > touchStartX + swipeThreshold) {
+      prevSlide();
+      resetInterval();
     }
   });
-});
 
-const backToTopBtn = document.getElementById("backToTop");
-
-window.addEventListener("scroll", () => {
-  if (window.scrollY > 500) {
-    backToTopBtn.style.display = "block";
-  } else {
-    backToTopBtn.style.display = "none";
-  }
-});
-
-backToTopBtn.addEventListener("click", () => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  // Initialize
+  updateSlider();
 });
